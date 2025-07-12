@@ -22,4 +22,4 @@ function sendSensorData(sensor_id) {
 // Send data every 1 minute instead of 1 hour for testing
 setInterval(() => {
   sensors.forEach(sendSensorData);
-}, 60 * 1000); // 1 min interval (use 60 * 60 * 1000 for 1 hour)
+}, 60 * 60 * 1000);
