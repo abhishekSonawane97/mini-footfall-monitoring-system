@@ -8,20 +8,17 @@ function App() {
   const [totals, setTotals] = useState([]);
 
   useEffect(() => {
-    // Fetch device status
+  const fetchData = () => {
+    // Fetch devices
     fetch('http://localhost:5050/devices')
       .then((res) => res.json())
-      .then((data) => {
-        console.log('Devices:', data);
-        setDevices(data);
-      })
-      .catch((err) => console.error('Error fetching devices:', err));
+      .then(setDevices)
+      .catch(console.error);
 
-    // Fetch analytics for today
+    // Fetch analytics
     fetch('http://localhost:5050/analytics')
       .then((res) => res.json())
       .then((data) => {
-        console.log("Analytics:", data);
         const today = new Date().toISOString().slice(0, 10);
         const grouped = {};
 
@@ -39,12 +36,22 @@ function App() {
 
         setTotals(result);
       })
-      .catch((err) => console.error('Error fetching totals:', err));
-  }, []);
+      .catch(console.error);
+  };
+
+  fetchData(); // Fetch once on mount
+
+  const interval = setInterval(fetchData, 3600000);
+
+  // Cleanup on unmount
+  return () => clearInterval(interval);
+}, []);
 
   return (
     <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
-      <h1>Device Status</h1>
+
+      <h1 style={{textAlign: 'center'}}>Dashboard</h1>
+      <h2>Device Status</h2>
       <ul>
         {devices.map((device) => (
           <li key={device.sensor_id}>
