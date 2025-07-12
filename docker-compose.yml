@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "5050:5050"
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - frontend
+    dns:
+      - 8.8.8.8  # Helps resolve MongoDB Atlas DNS
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:80"
+
+  simulator:
+    build: ./simulator
+    depends_on:
+      - backend
